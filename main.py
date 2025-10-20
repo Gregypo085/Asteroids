@@ -4,6 +4,8 @@
 import pygame
 from constants import *
 from player import Player
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
 
 def main():
     print("Starting Asteroids!")
@@ -13,7 +15,7 @@ def main():
     # Initialize Pygame
     pygame.init()
 
-    clock = pygame.time.Clock()
+    clock = pygame.time.Clock() # to manage frame rate
     dt = 0
 
     # Create a screen surface (the game window)
@@ -22,14 +24,25 @@ def main():
     # Groups to hold updateable and drawable objects
     updateable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
 
-    Player.containers = updateable, drawable # set the containers for Player class
+    # set the containers for AsteroidField class
+    AsteroidField.containers = updateable
+    field = AsteroidField()
+
+    # set the containers for Asteroid class
+    Asteroid.containers = asteroids, updateable, drawable
+
+    # set the containers for Player class
+    Player.containers = updateable, drawable
 
     # Create a player instance at the center of the screen
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
     # Game Loop
     while True:
+        dt = clock.tick(60) / 1000  # Limit to 60 FPS and get delta time in seconds
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -42,12 +55,9 @@ def main():
         
         for entity in drawable: # draw all drawable entities
             entity.draw(screen)
-        
 
         # Update the display
         pygame.display.flip()
-
-        dt = clock.tick(60) / 1000  # Limit to 60 FPS and get delta time in seconds
 
 
 if __name__ == "__main__":
