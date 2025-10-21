@@ -54,14 +54,19 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 return
+            elif event.type == pygame.USEREVENT:
+                player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+                pygame.time.set_timer(pygame.USEREVENT, 0) # disable the timer
         
         updateable.update(dt) # update player with delta time before drawing
 
-        for asteroid in asteroids:
-            if player.collides_with(asteroid):
-                print("Game over!")
-                pygame.quit()
-                return
+        if player.alive():
+            for asteroid in asteroids:
+                if player.collides_with(asteroid):
+                    print("Player Destroyed!")
+                    player.kill()
+                    pygame.time.set_timer(pygame.USEREVENT, 2000)
+                    break  # stop checking collisions after death
 
         for shot in shots: # check for shot-asteroid collisions
             for asteroid in asteroids:
