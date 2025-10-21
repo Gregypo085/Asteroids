@@ -50,6 +50,13 @@ def main():
         
         updateable.update(dt) #update player with delta time before drawing
 
+        for asteroid in asteroids:
+            if player.collides_with(asteroid):
+                print("Game over!")
+                pygame.quit()
+                return
+
+
         # Fill the screen with black
         screen.fill("black")
         
