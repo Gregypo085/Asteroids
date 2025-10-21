@@ -26,7 +26,7 @@ def main():
     updateable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
-    shot = pygame.sprite.Group()
+    shots = pygame.sprite.Group()
 
     # set the containers for AsteroidField class
     AsteroidField.containers = updateable
@@ -39,10 +39,12 @@ def main():
     Player.containers = updateable, drawable
 
     # set the containers for Shot class
-    Shot.containers = shot, updateable, drawable
+    Shot.containers = shots, updateable, drawable
 
     # Create a player instance at the center of the screen
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+
+    
 
     # Game Loop
     while True:
@@ -53,13 +55,20 @@ def main():
                 pygame.quit()
                 return
         
-        updateable.update(dt) #update player with delta time before drawing
+        updateable.update(dt) # update player with delta time before drawing
 
         for asteroid in asteroids:
             if player.collides_with(asteroid):
                 print("Game over!")
                 pygame.quit()
                 return
+
+        for shot in shots: # check for shot-asteroid collisions
+            for asteroid in asteroids:
+                if shot.collides_with(asteroid):
+                    asteroid.kill()
+                    shot.kill()
+                    break # no need to check other asteroids
 
 
         # Fill the screen with black
