@@ -55,8 +55,18 @@ def main():
                 pygame.quit()
                 return
             elif event.type == pygame.USEREVENT:
+                # Clear all asteroids and shots
+                for asteroid in asteroids:
+                    asteroid.kill()
+                for shot in shots:
+                    shot.kill()
+
+                # Respawn player at center
                 player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-                pygame.time.set_timer(pygame.USEREVENT, 0) # disable the timer
+
+                # Stop the timer
+                pygame.time.set_timer(pygame.USEREVENT, 0)
+
         
         updateable.update(dt) # update player with delta time before drawing
 
